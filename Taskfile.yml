@@ -1,0 +1,27 @@
+version: '3'
+
+tasks:
+  default:
+    desc: Display available tasks
+    cmds:
+      - task -l
+
+  start-localstack:
+    desc: Start LocalStack using Docker Compose
+    cmds:
+      - docker-compose -f compose.yml up
+
+  stop-localstack:
+    desc: Stop LocalStack using Docker Compose
+    cmds:
+      - docker-compose -f compose.yml down
+
+  stree:
+    cmds:
+      - go run main.go {{.ARGS}}
+    desc: Run the stree application with specified arguments
+
+  ls-all:
+    desc: List all objects in S3 bucket
+    cmds:
+      - aws s3 ls s3://my-bucket/test/ --recursive --profile local --endpoint-url=http://localhost:4566
