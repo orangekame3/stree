@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -35,7 +34,6 @@ var streeCmd = &cobra.Command{
 			AwsRegion:   awsRegion,
 			EndpointURL: endpointURL,
 			Local:       local,
-			NoColor:     noColor,
 		}
 
 		s3Svc := pkg.InitializeAWSSession(s3Config)
@@ -49,10 +47,13 @@ var streeCmd = &cobra.Command{
 
 		root := gtree.NewRoot(color.BlueString(bucket))
 
-		err := pkg.FetchS3Objects(s3Svc, bucket, prefix, root, noColor)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
 		if err != nil {
-			log.Fatalf("unable to list bucket %q objects: %v", bucket, err)
+			fmt.Println("failed to fetch S3 object keys:", err)
+			return
 		}
+
+		root = pkg.BuildTree(root, keys, noColor)
 
 		if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
 			fmt.Println(err)

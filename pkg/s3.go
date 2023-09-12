@@ -6,7 +6,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/ddddddO/gtree"
 )
 
 type S3Config struct {
@@ -14,7 +13,6 @@ type S3Config struct {
 	AwsRegion   string
 	EndpointURL string
 	Local       bool
-	NoColor     bool
 }
 
 func InitializeAWSSession(config S3Config) *s3.S3 {
@@ -29,32 +27,38 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 			},
 		}
 		sess = session.Must(session.NewSessionWithOptions(sessOptions))
-	} else {
-		sessOptions := session.Options{
-			Profile: config.AwsProfile,
-		}
-		if config.AwsRegion != "" {
-			sessOptions.Config = aws.Config{Region: aws.String(config.AwsRegion)}
-		}
-		sess = session.Must(session.NewSessionWithOptions(sessOptions))
+		return s3.New(sess)
 	}
 
-	s3Svc := s3.New(sess)
-	return s3Svc
+	sessOptions := session.Options{
+		Profile: config.AwsProfile,
+	}
+	if config.AwsRegion != "" {
+		sessOptions.Config = aws.Config{Region: aws.String(config.AwsRegion)}
+	}
+	sess = session.Must(session.NewSessionWithOptions(sessOptions))
+
+	return s3.New(sess)
 }
 
-func FetchS3Objects(s3Svc *s3.S3, bucket string, prefix string, root *gtree.Node, noColor bool) error {
+func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string) ([][]string, error) {
 	input := &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),
 		Prefix: aws.String(prefix),
 	}
+	var keys [][]string
 
-	err := s3Svc.ListObjectsV2Pages(input, func(page *s3.ListObjectsV2Output, lastPage bool) bool {
+	pageHandler := func(page *s3.ListObjectsV2Output, lastPage bool) bool {
 		for _, obj := range page.Contents {
-			keys := strings.Split(*obj.Key, "/")
-			AddNodeWithColor(root, keys, 0, noColor)
+			key := strings.Split(*obj.Key, "/")
+			keys = append(keys, key)
 		}
 		return !lastPage
-	})
-	return err
+	}
+
+	if err := s3Svc.ListObjectsV2Pages(input, pageHandler); err != nil {
+		return nil, err
+	}
+
+	return keys, nil
 }

@@ -1,4 +1,3 @@
-// color.go
 package pkg
 
 import (
@@ -6,15 +5,12 @@ import (
 	"github.com/fatih/color"
 )
 
-func AddNodeWithColor(parent *gtree.Node, keys []string, depth int, noColor bool) {
+func addNodeWithColor(parent *gtree.Node, keys []string, depth int) *gtree.Node {
 	if len(keys) == 0 {
-		return
+		return nil
 	}
-
 	var coloredKey string
-	if noColor {
-		coloredKey = keys[0]
-	} else if len(keys) == 1 {
+	if len(keys) == 1 {
 		// This is a file
 		coloredKey = colorFile(keys[0])
 	} else {
@@ -23,7 +19,7 @@ func AddNodeWithColor(parent *gtree.Node, keys []string, depth int, noColor bool
 	}
 
 	node := parent.Add(coloredKey)
-	AddNodeWithColor(node, keys[1:], depth+1, noColor)
+	return addNodeWithColor(node, keys[1:], depth+1)
 }
 
 func colorFile(key string) string {
@@ -32,4 +28,14 @@ func colorFile(key string) string {
 
 func colorDirectory(key string) string {
 	return color.New(color.FgBlue).SprintFunc()(key)
+}
+
+func addNodeWithoutColor(parent *gtree.Node, keys []string, depth int) *gtree.Node {
+	if len(keys) == 0 {
+		return nil
+	}
+
+	coloredKey := keys[0]
+	node := parent.Add(coloredKey)
+	return addNodeWithoutColor(node, keys[1:], depth+1)
 }
