@@ -1,10 +1,7 @@
 #!/bin/bash
 
 # AWS CLIの設定
-export AWS_ACCESS_KEY_ID=dummy
-export AWS_SECRET_ACCESS_KEY=dummy
-export AWS_DEFAULT_REGION=us-east-1
-export AWS_ENDPOINT=http://localstack:4566
+export AWS_ENDPOINT=http://localhost:4566
 
 # バケットの作成
 aws --endpoint-url=$AWS_ENDPOINT s3 mb s3://my-bucket
