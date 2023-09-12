@@ -149,4 +149,4 @@ Flags:
 
 # Acknowledgments
 
-The concept of "stree" was inspired by the pioneering work seen in [gtree](https://github.com/ddddddO/gtree). We are grateful for the inspiration.
+The concept of "stree" was inspired by the pioneering work seen in [gtree](https://github.com/ddddddO/gtree). I'm grateful for the inspiration.
