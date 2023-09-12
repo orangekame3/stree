@@ -24,24 +24,66 @@ package cmd
 import (
 	"os"
 
+	"fmt"
+	"strings"
+
 	"github.com/spf13/cobra"
+
+	"github.com/fatih/color"
+	"github.com/orangekame3/stree/pkg"
+
+	"github.com/ddddddO/gtree"
 )
 
-
+var (
+	awsProfile  string
+	awsRegion   string
+	endpointURL string
+	local       bool
+	noColor     bool
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "stree",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "A brief description of your command",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if noColor {
+			color.NoColor = true // disables colorized output
+		}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+		s3Config := pkg.S3Config{
+			AwsProfile:  awsProfile,
+			AwsRegion:   awsRegion,
+			EndpointURL: endpointURL,
+			Local:       local,
+		}
+
+		s3Svc := pkg.InitializeAWSSession(s3Config)
+
+		bucketAndPrefix := strings.SplitN(args[0], "/", 2)
+		bucket := bucketAndPrefix[0]
+		prefix := ""
+		if len(bucketAndPrefix) > 1 {
+			prefix = bucketAndPrefix[1]
+		}
+
+		root := gtree.NewRoot(color.BlueString(bucket))
+
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
+		if err != nil {
+			fmt.Println("failed to fetch S3 object keys:", err)
+			return
+		}
+
+		root = pkg.BuildTree(root, keys, noColor)
+
+		if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
+			fmt.Println(err)
+			return
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -54,15 +96,10 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.stree.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
+	rootCmd.Flags().StringVarP(&awsProfile, "profile", "p", "local", "AWS profile to use")
+	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", "us-east-1", "AWS region to use (overrides the region specified in the profile)")
+	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "http://localhost:4566", "AWS endpoint URL to use (useful for local testing with LocalStack)")
+	rootCmd.Flags().BoolVar(&local, "local", false, "Use LocalStack configuration")
+	rootCmd.Flags().BoolVar(&noColor, "no-color", false, "Disable colorized output")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-
