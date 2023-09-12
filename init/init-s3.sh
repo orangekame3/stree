@@ -13,25 +13,25 @@ mkdir -p data/test/dir2/dir2_1/dir2_1_1
 mkdir -p data/test/dir3
 
 # 各ディレクトリに異なる数のCSVファイルを生成
-for i in {1..30}
+for i in {1..2}
 do
   echo "name,age" > "data/test/dir1/dir1_1/dir1_1_1/file${i}.csv"
   echo "Alice,30" >> "data/test/dir1/dir1_1/dir1_1_1/file${i}.csv"
 done
 
-for i in {1..20}
+for i in {1..3}
 do
   echo "name,age" > "data/test/dir1/dir1_2/file${i}.csv"
   echo "Bob,40" >> "data/test/dir1/dir1_2/file${i}.csv"
 done
 
-for i in {1..50}
+for i in {1..3}
 do
   echo "name,age" > "data/test/dir2/dir2_1/dir2_1_1/file${i}.csv"
   echo "Charlie,35" >> "data/test/dir2/dir2_1/dir2_1_1/file${i}.csv"
 done
 
-for i in {1..10}
+for i in {1..2}
 do
   echo "name,age" > "data/test/dir3/file${i}.csv"
   echo "Dave,50" >> "data/test/dir3/file${i}.csv"

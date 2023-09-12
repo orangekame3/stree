@@ -24,4 +24,4 @@ tasks:
   ls-local:
     desc: List all objects in S3 bucket
     cmds:
-      - aws s3 ls s3://my-bucket/test/dir3/ --recursive --profile local --region us-east-1 --endpoint-url=http://localhost:4566
+      - aws s3 ls s3://my-bucket/ --recursive --profile local --region us-east-1 --endpoint-url=http://localhost:4566

@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-<img src="stree.png" alt="stree" height="350" width="350"/>
+<img src="img/stree.png" alt="stree" height="350" width="350"/>
 </a>
 </p>
 
@@ -18,6 +18,11 @@
 
 <p align="center">
 Directory trees of S3
+</p>
+
+<p align="center">
+<img src="img/demo.gif" alt="stree" height="800" width="1200"/>
+</a>
 </p>
 
 # Install
