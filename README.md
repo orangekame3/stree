@@ -21,7 +21,7 @@ Directory trees of S3
 </p>
 
 <p align="center">
-<img src="img/demo.gif" alt="stree" height="800" width="1400"/>
+<img src="img/demo.gif" alt="stree" height="auto"/>
 </a>
 </p>
 
