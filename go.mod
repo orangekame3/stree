@@ -1,12 +1,11 @@
 module github.com/orangekame3/stree
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/aws/aws-sdk-go v1.45.6
 	github.com/ddddddO/gtree v1.9.9
 	github.com/fatih/color v1.15.0
-	github.com/google/go-cmp v0.5.9
 	github.com/spf13/cobra v1.7.0
 )
 
