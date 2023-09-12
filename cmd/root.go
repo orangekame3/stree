@@ -45,7 +45,7 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "stree",
+	Use:   "stree [bucket/prefix]",
 	Short: "A brief description of your command",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -71,7 +71,7 @@ var rootCmd = &cobra.Command{
 
 		root := gtree.NewRoot(color.BlueString(bucket))
 
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
+		keys, dirCount, fileCount, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
 		if err != nil {
 			fmt.Println("failed to fetch S3 object keys:", err)
 			return
@@ -83,6 +83,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println(err)
 			return
 		}
+		fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
 	},
 }
 
@@ -99,7 +100,6 @@ func init() {
 	rootCmd.Flags().StringVarP(&awsProfile, "profile", "p", "local", "AWS profile to use")
 	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", "us-east-1", "AWS region to use (overrides the region specified in the profile)")
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "http://localhost:4566", "AWS endpoint URL to use (useful for local testing with LocalStack)")
-	rootCmd.Flags().BoolVar(&local, "local", false, "Use LocalStack configuration")
-	rootCmd.Flags().BoolVar(&noColor, "no-color", false, "Disable colorized output")
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
+	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
 }

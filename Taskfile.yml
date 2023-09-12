@@ -18,8 +18,13 @@ tasks:
 
   stree-local:
     cmds:
-      - go run main.go my-bucket --local
+      - go run main.go my-bucket/test/dir2 --local
     desc: Run the stree application with specified arguments
+
+  stree-help:
+    cmds:
+      - go run main.go --help
+    desc: Display help for the stree application
 
   ls-local:
     desc: List all objects in S3 bucket
