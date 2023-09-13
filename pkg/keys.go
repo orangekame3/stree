@@ -1,3 +1,4 @@
+// Package: pkg is a package that contains the business logic for stree
 package pkg
 
 import (
