@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"errors"
+	"log"
 	"os"
 
 	"fmt"
@@ -43,15 +45,11 @@ var (
 	noColor     bool
 )
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "stree [bucket/prefix]",
 	Short: "A brief description of your command",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if noColor {
-			color.NoColor = true // disables colorized output
-		}
 
 		s3Config := pkg.S3Config{
 			AwsProfile:  awsProfile,
@@ -62,33 +60,33 @@ var rootCmd = &cobra.Command{
 
 		s3Svc := pkg.InitializeAWSSession(s3Config)
 
-		bucketAndPrefix := strings.SplitN(args[0], "/", 2)
-		bucket := bucketAndPrefix[0]
-		prefix := ""
-		if len(bucketAndPrefix) > 1 {
-			prefix = bucketAndPrefix[1]
+		bucket, prefix, err := extractBucketAndPrefix(args[0])
+		if err != nil {
+			log.Fatalf("failed to extract bucket and prefix: %v", err)
+		}
+
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
+		if err != nil {
+			log.Fatalf("failed to fetch S3 object keys: %v", err)
+			return
 		}
 
 		root := gtree.NewRoot(color.BlueString(bucket))
-
-		keys, dirCount, fileCount, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
-		if err != nil {
-			fmt.Println("failed to fetch S3 object keys:", err)
-			return
+		if noColor {
+			root = pkg.BuildTreeWithoutColor(root, keys)
+		} else {
+			root = pkg.BuildTreeWithColor(root, keys)
 		}
-
-		root = pkg.BuildTree(root, keys, noColor)
 
 		if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
-			fmt.Println(err)
+			log.Fatalf("failed to output tree: %v", err)
 			return
 		}
+		fileCount, dirCount := pkg.ProcessKeys(keys)
 		fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -102,4 +100,19 @@ func init() {
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "http://localhost:4566", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
+}
+
+func extractBucketAndPrefix(input string) (string, string, error) {
+	if input == "" {
+		return "", "", errors.New("[bucket/prefix] cannot be empty")
+	}
+
+	parts := strings.SplitN(input, "/", 2)
+	bucket := parts[0]
+
+	if len(parts) == 1 {
+		return bucket, "", nil
+	}
+
+	return bucket, parts[1], nil
 }

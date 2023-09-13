@@ -41,34 +41,24 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 	return s3.New(sess)
 }
 
-func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string) ([][]string, int, int, error) {
+func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string) ([][]string, error) {
 	input := &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),
 		Prefix: aws.String(prefix),
 	}
 	var keys [][]string
-	var fileCount int
-	var uniqueDirs = map[string]struct{}{}
+
 	pageHandler := func(page *s3.ListObjectsV2Output, lastPage bool) bool {
 		for _, obj := range page.Contents {
 			key := strings.Split(*obj.Key, "/")
 			keys = append(keys, key)
-
-			// Collect all unique directories
-			for i := 1; i < len(key); i++ {
-				uniqueDirs[strings.Join(key[:i], "/")] = struct{}{}
-			}
-
-			if len(key) == 1 || key[len(key)-1] != "" {
-				fileCount++
-			}
 		}
 		return !lastPage
 	}
 
 	if err := s3Svc.ListObjectsV2Pages(input, pageHandler); err != nil {
-		return nil, 0, 0, err
+		return nil, err
 	}
 
-	return keys, len(uniqueDirs), fileCount, nil
+	return keys, nil
 }
