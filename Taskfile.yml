@@ -18,7 +18,7 @@ tasks:
 
   stree-local:
     cmds:
-      - go run main.go my-bucket/test/dir2 --local
+      - go run main.go my-bucket --local
     desc: Run the stree application with specified arguments
 
   stree-help:
@@ -35,3 +35,4 @@ tasks:
     desc: Run MegaLinter
     cmds:
       - mega-linter-runner --flavor go
+      
