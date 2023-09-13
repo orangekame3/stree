@@ -35,4 +35,3 @@ tasks:
     desc: Run MegaLinter
     cmds:
       - mega-linter-runner --flavor go
-      
