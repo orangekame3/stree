@@ -1,9 +1,11 @@
+// Package pkg provides the core functionality of the program.
 package pkg
 
 import (
 	"strings"
 )
 
+// ProcessKeys returns the number of files and directories in the provided slice of keys
 func ProcessKeys(keys [][]string) (int, int) {
 	var fileCount int
 	var uniqueDirs = map[string]struct{}{}

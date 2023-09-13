@@ -1,3 +1,4 @@
+//Package cmd is a command line tool for visualizing the structure of S3 buckets
 /*
 Copyright © 2023 Takafumi Miyanaga <miya.org.0309@gmail.com>
 
@@ -87,6 +88,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// Execute executes the root command.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {

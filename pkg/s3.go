@@ -1,3 +1,4 @@
+// Package pkg provides the core functionality of the program.
 package pkg
 
 import (
@@ -8,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+// S3Config represents the configuration for an S3 session
 type S3Config struct {
 	AwsProfile  string
 	AwsRegion   string
@@ -15,6 +17,7 @@ type S3Config struct {
 	Local       bool
 }
 
+// InitializeAWSSession returns an AWS session based on the provided configuration
 func InitializeAWSSession(config S3Config) *s3.S3 {
 	var sess *session.Session
 	if config.Local {
@@ -41,6 +44,7 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 	return s3.New(sess)
 }
 
+// FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
 func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string) ([][]string, error) {
 	input := &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),

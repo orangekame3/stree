@@ -1,17 +1,18 @@
 <br>
+
 <p align="center">
-<img src="img/stree.png" alt="stree" height="350" width="350"/>
+<img src="img/stree.png" alt="S3 directory tree visualization" height="350" width="350"/>
 </p>
 
 <p align="center">
 <a href="https://opensource.org/licenses/MIT">
-<img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+<img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License badge">
 </a>
 <a href="https://pkg.go.dev/github.com/orangekame3/stree">
-<img src="https://github.com/orangekame3/stree/actions/workflows/release.yml/badge.svg">
+<img src="https://github.com/orangekame3/stree/actions/workflows/release.yml/badge.svg" alt="Release workflow status badge">
 </a>
 <a href="https://github.com/orangekame3/stree/actions/workflows/tagpr.yml">
-<img src="https://github.com/orangekame3/stree/actions/workflows/tagpr.yml/badge.svg">
+<img src="https://github.com/orangekame3/stree/actions/workflows/tagpr.yml/badge.svg" alt="Tag PR workflow status badge">
 </a>
 </p>
 
@@ -20,7 +21,7 @@ Directory trees of S3
 </p>
 
 <p align="center">
-<img src="img/demo.gif" alt="stree" height="auto"/>
+<img src="img/demo.gif" alt="Demonstration of stree tool in action" height="auto" width="auto"/>
 </p>
 
 # Overview
@@ -28,7 +29,7 @@ Directory trees of S3
 `stree` is a CLI tool designed to visualize the directory tree structure of an S3 bucket.  
 By inputting an S3 bucket/prefix and utilizing various flags to customize your request, you can obtain a colorized or non-colorized directory tree right in your terminal.
 
-Whether it's for verifying the file structure, sharing the structure with your team, or any other purpose, `stree` offers an easy and convenient way to explore your S3 buckets. 
+Whether it's for verifying the file structure, sharing the structure with your team, or any other purpose, `stree` offers an easy and convenient way to explore your S3 buckets.
 
 # Features
 
@@ -56,7 +57,6 @@ brew install orangekame3/tap/stree
 Download the latest compiled binaries and put it anywhere in your executable path.
 
 [Download here](https://github.com/orangekame3/stree/releases)
-
 
 # Getting Started
 

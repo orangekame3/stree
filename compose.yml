@@ -5,7 +5,7 @@ services:
     container_name: "localstack"
     image: localstack/localstack:2.0.2
     ports:
-      - "4566:4566"            # LocalStack Gateway
+      - "4566:4566" # LocalStack Gateway
     environment:
       - SERVICES=s3
       - DEBUG=${DEBUG-}
