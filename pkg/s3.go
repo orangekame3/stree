@@ -1,4 +1,4 @@
-// Package: pkg is a package that contains the business logic for stree
+// Package pkg provides the core functionality of the program.
 package pkg
 
 import (
@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+// S3Config represents the configuration for an S3 session
 type S3Config struct {
 	AwsProfile  string
 	AwsRegion   string

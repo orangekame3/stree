@@ -1,4 +1,4 @@
-// Package: pkg is a package that contains the business logic for stree
+// Package pkg provides the core functionality of the program.
 package pkg
 
 import (
@@ -6,6 +6,7 @@ import (
 	"github.com/fatih/color"
 )
 
+// BuildTreeWithColor builds a tree with colored nodes
 func BuildTreeWithColor(root *gtree.Node, keys [][]string) *gtree.Node {
 	for _, key := range keys {
 		addNodeWithColor(root, key, 0)
@@ -13,6 +14,7 @@ func BuildTreeWithColor(root *gtree.Node, keys [][]string) *gtree.Node {
 	return root
 }
 
+// BuildTreeWithoutColor builds a tree without colored nodes
 func BuildTreeWithoutColor(root *gtree.Node, keys [][]string) *gtree.Node {
 	for _, key := range keys {
 		addNodeWithoutColor(root, key, 0)
