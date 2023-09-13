@@ -14,6 +14,9 @@
 <a href="https://github.com/orangekame3/stree/actions/workflows/tagpr.yml">
 <img src="https://github.com/orangekame3/stree/actions/workflows/tagpr.yml/badge.svg" alt="Tag PR workflow status badge">
 </a>
+<a href="https://github.com/orangekame3/stree/actions?query=workflows/MegaLinter">
+<img src="https://github.com/orangekame3/stree/workflows/MegaLinter/badge.svg" alt="MegaLinter badge">
+</a>
 </p>
 
 <p align="center">
