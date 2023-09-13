@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.0.7](https://github.com/orangekame3/stree/compare/v0.0.6...v0.0.7) - 2023-09-13
+
 ## [v0.0.6](https://github.com/orangekame3/stree/compare/v0.0.5...v0.0.6) - 2023-09-13
 
 - Add mega-linter by @orangekame3 in <https://github.com/orangekame3/stree/pull/7>
