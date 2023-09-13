@@ -47,7 +47,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "stree [bucket/prefix]",
-	Short: "A brief description of your command",
+	Short: "stree is a command line tool for visualizing the structure of S3 buckets",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
