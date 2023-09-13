@@ -118,3 +118,7 @@ func extractBucketAndPrefix(input string) (string, string, error) {
 
 	return bucket, parts[1], nil
 }
+
+func SetVersionInfo(version, date string) {
+	rootCmd.Version = fmt.Sprintf("%s (Built on %s)", version, date)
+}
