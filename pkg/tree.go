@@ -26,6 +26,12 @@ func addNodeWithoutColor(parent *gtree.Node, keys []string, depth int) *gtree.No
 	if len(keys) == 0 {
 		return nil
 	}
+
+	// Skip adding empty strings as nodes
+	if len(keys) == 1 && keys[0] == "" {
+		return nil
+	}
+
 	// Add the current key (without color) as a node to the parent
 	node := parent.Add(keys[0])
 	// Recursively add the remaining keys
@@ -34,6 +40,11 @@ func addNodeWithoutColor(parent *gtree.Node, keys []string, depth int) *gtree.No
 
 func addNodeWithColor(parent *gtree.Node, keys []string, depth int) *gtree.Node {
 	if len(keys) == 0 {
+		return nil
+	}
+
+	// Skip adding empty strings as nodes
+	if len(keys) == 1 && keys[0] == "" {
 		return nil
 	}
 
