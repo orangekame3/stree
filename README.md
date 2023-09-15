@@ -69,14 +69,14 @@ Download the latest compiled binaries and put it anywhere in your executable pat
 
 From here on, it is assumed that the config and credentials are set as follows.
 
-```
+```shell
 ~/.aws/config
 [my_profile]
 region = ap-northeast-1
 output = json
 ```
 
-```
+```shell
 ~/.aws/credentials
 [my_profile]
 aws_access_key_id=XXXXXXXXXXXXXXXXXXXXX
