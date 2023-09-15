@@ -98,8 +98,8 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().StringVarP(&awsProfile, "profile", "p", "local", "AWS profile to use")
-	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", "us-east-1", "AWS region to use (overrides the region specified in the profile)")
-	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "http://localhost:4566", "AWS endpoint URL to use (useful for local testing with LocalStack)")
+	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", "", "AWS region to use (overrides the region specified in the profile)")
+	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
 }
