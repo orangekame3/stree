@@ -24,23 +24,31 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 		sessOptions := session.Options{
 			Profile: config.AwsProfile,
 			Config: aws.Config{
-				Region:           aws.String(config.AwsRegion),
-				Endpoint:         aws.String(config.EndpointURL),
+				Region:           aws.String("us-east-1"),
+				Endpoint:         aws.String("http://localhost:4566"),
 				S3ForcePathStyle: aws.Bool(true),
 			},
+		}
+		// override region and endpoint
+		if config.AwsRegion != "" {
+			sess.Config.Region = aws.String(config.AwsRegion)
+		}
+		if config.EndpointURL != "" {
+			sess.Config.Region = aws.String(config.AwsRegion)
 		}
 		sess = session.Must(session.NewSessionWithOptions(sessOptions))
 		return s3.New(sess)
 	}
 
 	sessOptions := session.Options{
-		Profile: config.AwsProfile,
+		Profile:           config.AwsProfile,
+		SharedConfigState: session.SharedConfigEnable,
 	}
+	// override region
 	if config.AwsRegion != "" {
-		sessOptions.Config = aws.Config{Region: aws.String(config.AwsRegion)}
+		sessOptions.Config.Region = aws.String(config.AwsRegion)
 	}
 	sess = session.Must(session.NewSessionWithOptions(sessOptions))
-
 	return s3.New(sess)
 }
 
