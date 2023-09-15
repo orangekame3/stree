@@ -21,13 +21,4 @@ THE SOFTWARE.
 */
 package main
 
-import (
-	"time"
-
-	"github.com/orangekame3/stree/cmd"
-)
-
-func main() {
-	cmd.SetVersionInfo(version, time.Now().String())
-	cmd.Execute()
-}
+const version = "0.0.8"
