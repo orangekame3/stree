@@ -168,13 +168,21 @@ stree my-bucket/test/dir2 -r us-east-1 -e http://localhost:4537
 
 You can disable color output with `--no-color (-n)`.
 
-▼With color
+<p align="center">
+With color
+</p>
 
-![with color](./img/color.png)
+<p align="center">
+<img src="img/color.png" alt="with color" height="auto" width="auto"/>
+</p>
 
-▼Without color
+<p align="center">
+Without color
+</p>
 
-![without color](./img/no-color.png)
+<p align="center">
+<img src="img/no-color.png" alt="without color" height="auto" width="auto"/>
+</p>
 
 # Usage
 
