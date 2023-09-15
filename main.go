@@ -27,10 +27,6 @@ import (
 	"github.com/orangekame3/stree/cmd"
 )
 
-var (
-	version = "0.0.8"
-)
-
 func main() {
 	cmd.SetVersionInfo(version, time.Now().String())
 	cmd.Execute()
