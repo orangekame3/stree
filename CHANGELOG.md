@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.9](https://github.com/orangekame3/stree/compare/v0.0.8...v0.0.9) - 2023-09-15
+- read profile region by @orangekame3 in https://github.com/orangekame3/stree/pull/12
+- add version file by @orangekame3 in https://github.com/orangekame3/stree/pull/14
+
 ## [v0.0.8](https://github.com/orangekame3/stree/compare/v0.0.7...v0.0.8) - 2023-09-13
 
 - skip adding node when empty path by @orangekame3 in <https://github.com/orangekame3/stree/pull/10>
