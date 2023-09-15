@@ -65,7 +65,7 @@ Download the latest compiled binaries and put it anywhere in your executable pat
 
 > **Warning**
 >Prerequisite
->You must set up the config and >credentials to be used with aws cli in advance
+>You must set up the config and credentials to be used with aws cli in advance
 
 From here on, it is assumed that the config and credentials are set as follows.
 
