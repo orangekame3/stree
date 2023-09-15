@@ -72,10 +72,11 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		root := gtree.NewRoot(color.BlueString(bucket))
+		root := gtree.NewRoot(bucket)
 		if noColor {
 			root = pkg.BuildTreeWithoutColor(root, keys)
 		} else {
+			root = gtree.NewRoot(color.BlueString(bucket))
 			root = pkg.BuildTreeWithColor(root, keys)
 		}
 
