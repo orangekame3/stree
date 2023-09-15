@@ -69,13 +69,15 @@ Download the latest compiled binaries and put it anywhere in your executable pat
 
 From here on, it is assumed that the config and credentials are set as follows.
 
-```:~/.aws/config
+```
+~/.aws/config
 [my_profile]
 region = ap-northeast-1
 output = json
 ```
 
-```:~/.aws/credentials
+```
+~/.aws/credentials
 [my_profile]
 aws_access_key_id=XXXXXXXXXXXXXXXXXXXXX
 aws_secret_access_key=XXXXXXXXXXXXXXXXX
@@ -165,6 +167,14 @@ stree my-bucket/test/dir2 -r us-east-1 -e http://localhost:4537
 ## Disable Color Output
 
 You can disable color output with `--no-color (-n)`.
+
+▼With color
+
+![with color](./img/color.png)
+
+▼Without color
+
+![without color](./img/no-color.png)
 
 # Usage
 
