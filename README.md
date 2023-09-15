@@ -61,20 +61,38 @@ Download the latest compiled binaries and put it anywhere in your executable pat
 
 [Download here](https://github.com/orangekame3/stree/releases)
 
-# Getting Started
+# How to Use
 
-## Prerequisites
+:::note
+Prerequisite
+You must set up the config and credentials to be used with aws cli in advance
+:::
 
-Before using `stree`, ensure that you have Go installed on your machine, or Homebrew for macOS users. You would also need to configure your AWS credentials appropriately to access your S3 buckets.
+From here on, it is assumed that the config and credentials are set as follows.
 
-## Running the Tool
+```:~/.aws/config
+[my_profile]
+region = ap-northeast-1
+output = json
+```
 
-After installing `stree`, run it with the necessary bucket/prefix and flags as shown in the usage section above. Here are a few examples to get you started:
+```:~/.aws/credentials
+[my_profile]
+aws_access_key_id=XXXXXXXXXXXXXXXXXXXXX
+aws_secret_access_key=XXXXXXXXXXXXXXXXX
+```
 
-### Display the directory tree using a specific AWS profile and region
+## Basic Commands
+
+Specify the bucket name and profile, and execute the following command. The profile is specified with `--profile (-p)`.
 
 ```shell
-$ stree my-bucket -p my-profile -r us-east-1
+stree my-bucket -p my_profile
+```
+
+You will get the following output.
+
+```shell
 my-bucket
 └── test
     ├── dir1
@@ -99,10 +117,15 @@ my-bucket
 9 directories, 10 files
 ```
 
-### Display the sub-directory tree using a specific AWS profile and region
+## Specifying Prefix
 
 ```shell
-$ stree my-bucket/test/dir2 -p my-profile -r us-east-1
+stree my-bucket/test/dir2 -p my_profile
+```
+
+The result of executing this command is as follows.
+
+```shell
 my-bucket
 └── test
     └── dir2
@@ -115,21 +138,34 @@ my-bucket
 4 directories, 3 files
 ```
 
-### Display the directory tree using Localstack
+## Overriding Region
+
+You can specify the region with `--region (-r)`. Use the `--region` flag to override when you want to specify a region other than the one listed in the profile.
+
+## Usage with Localstack
+
+It can also be used with Localstack. When using it with Localstack, the endpoint and region are set to the following by default.
 
 ```shell
-$ stree my-bucket/test/dir2 -l
-my-bucket
-└── test
-    └── dir2
-        └── dir2_1
-            └── dir2_1_1
-                ├── file1.csv
-                ├── file2.csv
-                └── file3.csv
-
-4 directories, 3 files
+endpoint = http://localhost:4566
+region = us-east-1
 ```
+
+Since the majority of cases are expected to use the above settings, we have added a flag for Localstack, which is `--local (-l)`.
+
+```shell
+stree my-bucket/test/dir2 -l
+```
+
+In case you need to change the endpoint and region due to special circumstances, you can override with `--region (-r)` flag and `--endpoint (-e)`.
+
+```shell
+stree my-bucket/test/dir2 -r us-east-1 -e http://localhost:4537
+```
+
+## Disable Color Output
+
+You can disable color output with `--no-color (-n)`.
 
 # Usage
 
