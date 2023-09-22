@@ -44,6 +44,7 @@ var (
 	endpointURL string
 	local       bool
 	noColor     bool
+	switchRole  string
 )
 
 var rootCmd = &cobra.Command{
@@ -57,6 +58,7 @@ var rootCmd = &cobra.Command{
 			AwsRegion:   awsRegion,
 			EndpointURL: endpointURL,
 			Local:       local,
+			SwitchRole:  switchRole,
 		}
 
 		s3Svc := pkg.InitializeAWSSession(s3Config)
@@ -103,6 +105,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
+	rootCmd.Flags().StringVarP(&switchRole, "switch-role", "s", "", "Role you want to switch to")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {

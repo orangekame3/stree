@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
@@ -15,6 +16,7 @@ type S3Config struct {
 	AwsRegion   string
 	EndpointURL string
 	Local       bool
+	SwitchRole  string
 }
 
 // InitializeAWSSession returns an AWS session based on the provided configuration
@@ -49,6 +51,11 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 		sessOptions.Config.Region = aws.String(config.AwsRegion)
 	}
 	sess = session.Must(session.NewSessionWithOptions(sessOptions))
+
+	if config.SwitchRole != "" {
+		return s3.New(sess, &aws.Config{Credentials: stscreds.NewCredentials(sess, config.SwitchRole)})
+	}
+
 	return s3.New(sess)
 }
 
