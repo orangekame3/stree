@@ -105,7 +105,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
-	rootCmd.Flags().StringVarP(&switchRole, "switch-role", "s", "", "ARN of the role you want to switch to")
+	rootCmd.Flags().StringVarP(&switchRole, "switch-role", "s", "", "Switch to ARN of the Role that can access the target S3 bucket")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {

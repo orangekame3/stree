@@ -39,6 +39,7 @@ Whether it's for verifying the file structure, sharing the structure with your t
 - **Colorized Output**: By default, `stree` provides a colorized tree structure, making it easy to differentiate between directories and files at a glance. This feature can be turned off with the `-n` or `--no-color` flag.
 - **LocalStack Support**: `stree` supports local testing with LocalStack, a fully functional local AWS cloud stack, thanks to the `--local` and `--endpoint-url` flags.
 - **Custom AWS Profile and Region**: Specify the AWS profile and region with the `--profile` and `--region` flags to override the default settings as needed.
+- **Switch Role Support**: Specify ARN of the role that can access the target S3 bucket with the `--swtch-role` flag.
 - **Ease of Installation**: Install `stree` via Go, Homebrew, or by downloading the latest compiled binaries from the GitHub releases page.
 
 # Install
@@ -197,6 +198,7 @@ Flags:
   -n, --no-color              Disable colorized output
   -p, --profile string        AWS profile to use (default "local")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
+  -s, --switch-role string    Switch to ARN of the Role that can access the target S3 bucket
   -v, --version               version for stree
 ```
 
