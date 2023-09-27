@@ -98,8 +98,8 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().StringVarP(&awsProfile, "profile", "p", "local", "AWS profile to use")
-	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", "", "AWS region to use (overrides the region specified in the profile)")
+	rootCmd.Flags().StringVarP(&awsProfile, "profile", "p", defaultProfile(), "AWS profile to use")
+	rootCmd.Flags().StringVarP(&awsRegion, "region", "r", defaultRegion(), "AWS region to use (overrides the region specified in the profile)")
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
@@ -123,4 +123,20 @@ func extractBucketAndPrefix(input string) (string, string, error) {
 // SetVersionInfo sets version and date to rootCmd
 func SetVersionInfo(version, date string) {
 	rootCmd.Version = fmt.Sprintf("%s (Built on %s)", version, date)
+}
+
+func defaultProfile() string {
+	if p, ok := os.LookupEnv("AWS_PROFILE"); ok {
+		return p
+	}
+	return "local"
+}
+
+func defaultRegion() string {
+	for _, e := range []string{"AWS_REGION", "AWS_DEFAULT_REGION"} {
+		if r, ok := os.LookupEnv(e); ok {
+			return r
+		}
+	}
+	return ""
 }
