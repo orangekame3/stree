@@ -129,7 +129,7 @@ func defaultProfile() string {
 	if p, ok := os.LookupEnv("AWS_PROFILE"); ok {
 		return p
 	}
-	return "local"
+	return "default"
 }
 
 func defaultRegion() string {
