@@ -53,24 +53,54 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string) ([][]string, error) {
-	input := &s3.ListObjectsV2Input{
-		Bucket: aws.String(bucket),
-		Prefix: aws.String(prefix),
+func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string, maxDepth *int) ([][]string, error) {
+	var delimiter *string
+	if maxDepth != nil {
+		delimiter = aws.String("/")
 	}
+	queue := []string{prefix}
+	depth := []int{0}
+	queued := map[string]struct{}{}
+
 	var keys [][]string
+	for len(queue) > 0 {
+		currentPrefix := queue[0]
+		currentDepth := depth[0]
+		queue = queue[1:]
+		depth = depth[1:]
 
-	pageHandler := func(page *s3.ListObjectsV2Output, lastPage bool) bool {
-		for _, obj := range page.Contents {
-			key := strings.Split(*obj.Key, "/")
+		if maxDepth != nil && currentDepth >= *maxDepth {
+			key := strings.Split(currentPrefix, "/")
 			keys = append(keys, key)
+			continue
 		}
-		return !lastPage
-	}
 
-	if err := s3Svc.ListObjectsV2Pages(input, pageHandler); err != nil {
-		return nil, err
-	}
+		input := &s3.ListObjectsV2Input{
+			Bucket:    aws.String(bucket),
+			Prefix:    aws.String(currentPrefix),
+			Delimiter: delimiter,
+		}
 
+		pageHandler := func(page *s3.ListObjectsV2Output, lastPage bool) bool {
+			for _, obj := range page.Contents {
+				key := strings.Split(*obj.Key, "/")
+				keys = append(keys, key)
+			}
+			if maxDepth != nil {
+				for _, commonPrefix := range page.CommonPrefixes {
+					if _, ok := queued[*commonPrefix.Prefix]; ok {
+						continue
+					}
+					queue = append(queue, *commonPrefix.Prefix)
+					depth = append(depth, currentDepth+1)
+				}
+			}
+			return !lastPage
+		}
+
+		if err := s3Svc.ListObjectsV2Pages(input, pageHandler); err != nil {
+			return nil, err
+		}
+	}
 	return keys, nil
 }

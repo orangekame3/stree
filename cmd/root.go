@@ -44,6 +44,7 @@ var (
 	endpointURL string
 	local       bool
 	noColor     bool
+	level       int
 )
 
 var rootCmd = &cobra.Command{
@@ -65,8 +66,11 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("failed to extract bucket and prefix: %v", err)
 		}
-
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix)
+		var maxDepth *int
+		if level > 0 {
+			maxDepth = &level
+		}
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -103,6 +107,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
+	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
