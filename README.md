@@ -34,6 +34,8 @@ By inputting an S3 bucket/prefix and utilizing various flags to customize your r
 
 Whether it's for verifying the file structure, sharing the structure with your team, or any other purpose, `stree` offers an easy and convenient way to explore your S3 buckets.
 
+日本語の紹介記事→[stree：S3バケットをtreeするCLIコマンド](https://future-architect.github.io/articles/20230926a/)
+
 # Features
 
 - **Colorized Output**: By default, `stree` provides a colorized tree structure, making it easy to differentiate between directories and files at a glance. This feature can be turned off with the `-n` or `--no-color` flag.
