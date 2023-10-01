@@ -192,7 +192,7 @@ Without color
 You can specify the depth level with `--level (-L)`. The default is 0, which means that all directories are displayed.
 
 ```shell
-stree my-bucket -l -L 3
+stree my-bucket -p my_profile -L 3
 my-bucket
 └── test
     ├── dir3
@@ -225,7 +225,7 @@ see [Assume AWS IAM Roles with MFA Using the AWS SDK for Go](https://aws.amazon.
 And then execute the following command.
 
 ```shell
-stree my-bucket -l -mfa
+stree my-bucket -p dev_david -mfa
 ```
 
 Also, if you wish to operate with a profile that assumes a role, you can specify it using the `--profile (-p)` flag, without the need for MFA.
