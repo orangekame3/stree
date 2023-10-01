@@ -40,6 +40,9 @@ Whether it's for verifying the file structure, sharing the structure with your t
 - **LocalStack Support**: `stree` supports local testing with LocalStack, a fully functional local AWS cloud stack, thanks to the `--local` and `--endpoint-url` flags.
 - **Custom AWS Profile and Region**: Specify the AWS profile and region with the `--profile` and `--region` flags to override the default settings as needed.
 - **Ease of Installation**: Install `stree` via Go, Homebrew, or by downloading the latest compiled binaries from the GitHub releases page.
+- **Depth level Specification**: With the new `--L` flag, you can now specify how many levels deep in the directory structure you'd like to visualize. This offers a more focused view, especially for large S3 buckets.
+- **Role Switching Support**: `stree` is now enhanced with the ability to switch AWS roles with MFA using the `--mfa` flag. This makes it easier to manage and view S3 buckets that require different IAM roles for access.
+- **Environment Variable Support**: `stree` now prioritizes environment variables for AWS Profile and Region settings. The tool will use the `AWS_PROFILE` environment variable if set, falling back to the `default` profile otherwise. Similarly, it will use the `AWS_REGION` or `AWS_DEFAULT_REGION` environment variables for the AWS region, if available. (see [AWS CLI Environment Variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html) for more information)
 
 # Install
 
@@ -184,6 +187,62 @@ Without color
 <img src="img/no-color.png" alt="without color" height="auto" width="auto"/>
 </p>
 
+## Specifying Depth Level
+
+You can specify the depth level with `--level (-L)`. The default is 0, which means that all directories are displayed.
+
+```shell
+stree my-bucket -l -L 3
+my-bucket
+└── test
+    ├── dir3
+    │   ├── file1.csv
+    │   └── file2.csv
+    ├── dir1
+    │   ├── dir1_1
+    │   └── dir1_2
+    └── dir2
+        └── dir2_1
+```
+
+## Role Switching Support
+
+You can switch roles with MFA using the `--mfa` flag. This makes it easier to manage and view S3 buckets that require different IAM roles for access.
+
+To use this feature, you must first set up the config and credentials to be used with aws cli in advance.
+
+```shell
+[profile dev_david]
+source_profile = my_profile
+# MFA device
+mfa_serial = arn:aws:iam::820544363308:mfa/david_mfa_device
+# Role to assume
+role_arn = arn:aws:iam::820544363308:role/david_role
+```
+
+see [Assume AWS IAM Roles with MFA Using the AWS SDK for Go](https://aws.amazon.com/jp/blogs/developer/assume-aws-iam-roles-with-mfa-using-the-aws-sdk-for-go/) for more information
+
+And then execute the following command.
+
+```shell
+stree my-bucket -l -mfa
+```
+
+Also, if you wish to operate with a profile that assumes a role, you can specify it using the `--profile (-p)` flag, without the need for MFA.
+
+```shell
+[profile dev_david]
+source_profile = my_profile
+# Role to assume
+role_arn = arn:aws:iam::820544363308:role/david_role
+```
+
+And then execute the following command.
+
+```shell
+stree my-bucket -p dev_david
+```
+
 # Usage
 
 ```shell
@@ -193,12 +252,12 @@ Usage:
 Flags:
   -e, --endpoint-url string   AWS endpoint URL to use (useful for local testing with LocalStack)
   -h, --help                  help for stree
+  -L, --level int             Descend only level directories
   -l, --local                 Use LocalStack configuration
   -m, --mfa                   Use Multi-Factor Authentication
   -n, --no-color              Disable colorized output
-  -p, --profile string        AWS profile to use (default "local")
+  -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
-  -v, --version               version for stree
 ```
 
 # License

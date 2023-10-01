@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -24,11 +25,11 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 	var sess *session.Session
 	if config.Local {
 		sessOptions := session.Options{
-			Profile: config.AwsProfile,
 			Config: aws.Config{
 				Region:           aws.String("us-east-1"),
 				Endpoint:         aws.String("http://localhost:4566"),
 				S3ForcePathStyle: aws.Bool(true),
+				Credentials:      credentials.NewStaticCredentials("dummy", "dummy", ""),
 			},
 		}
 		// override region and endpoint
