@@ -44,6 +44,7 @@ var (
 	endpointURL string
 	local       bool
 	noColor     bool
+	mfa         bool
 	level       int
 )
 
@@ -58,6 +59,7 @@ var rootCmd = &cobra.Command{
 			AwsRegion:   awsRegion,
 			EndpointURL: endpointURL,
 			Local:       local,
+			MFA:         mfa,
 		}
 
 		s3Svc := pkg.InitializeAWSSession(s3Config)
@@ -107,6 +109,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&endpointURL, "endpoint-url", "e", "", "AWS endpoint URL to use (useful for local testing with LocalStack)")
 	rootCmd.Flags().BoolVarP(&local, "local", "l", false, "Use LocalStack configuration")
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
+	rootCmd.Flags().BoolVarP(&mfa, "mfa", "m", false, "Use Multi-Factor Authentication")
 	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
 }
 

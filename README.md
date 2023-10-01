@@ -194,6 +194,7 @@ Flags:
   -e, --endpoint-url string   AWS endpoint URL to use (useful for local testing with LocalStack)
   -h, --help                  help for stree
   -l, --local                 Use LocalStack configuration
+  -m, --mfa                   Use Multi-Factor Authentication
   -n, --no-color              Disable colorized output
   -p, --profile string        AWS profile to use (default "local")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
