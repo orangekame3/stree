@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.0.11](https://github.com/orangekame3/stree/compare/v0.0.10...v0.0.11) - 2023-10-01
+
+- add CODEOWNERS by @orangekame3 in <https://github.com/orangekame3/stree/pull/21>
+- add credits by @orangekame3 in <https://github.com/orangekame3/stree/pull/22>
+- respect environment variables same as AWS CLI. by @fujiwara in <https://github.com/orangekame3/stree/pull/19>
+- gtree パッケージの更新 by @ddddddO in <https://github.com/orangekame3/stree/pull/24>
+- -level (-L) Option for Limit max depth by @mashiike in <https://github.com/orangekame3/stree/pull/23>
+- impl MFA by @ddddddO in <https://github.com/orangekame3/stree/pull/25>
+- update readme for release v0.0.11 by @orangekame3 in <https://github.com/orangekame3/stree/pull/26>
+- add article by @orangekame3 in <https://github.com/orangekame3/stree/pull/27>
+
 ## [v0.0.10](https://github.com/orangekame3/stree/compare/v0.0.9...v0.0.10) - 2023-09-15
 
 ## [v0.0.9](https://github.com/orangekame3/stree/compare/v0.0.8...v0.0.9) - 2023-09-15
