@@ -1,6 +1,6 @@
-<br>
-
-<p align="center">
+<div align="center">
+  
+# 📁stree
 <img src="img/stree.png" alt="S3 directory tree visualization" height="350" width="350"/>
 </p>
 
@@ -17,7 +17,7 @@
 <a href="https://github.com/orangekame3/stree/actions?query=workflows/MegaLinter">
 <img src="https://github.com/orangekame3/stree/workflows/MegaLinter/badge.svg" alt="MegaLinter badge">
 </a>
-</p>
+</div>
 
 <p align="center">
 Directory trees of S3
