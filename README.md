@@ -1,10 +1,10 @@
 <div align="center">
-  
-# 📁stree
 
 <img src="img/stree.png" alt="S3 directory tree visualization" height="350" width="350"/>
 </p>
 
+# 📁stree
+Directory trees of S3
 <p align="center">
 <a href="https://opensource.org/licenses/MIT">
 <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License badge">
@@ -20,13 +20,7 @@
 </a>
 </div>
 
-<p align="center">
-Directory trees of S3
-</p>
-
-<p align="center">
 <img src="img/demo.gif" alt="Demonstration of stree tool in action" height="auto" width="auto"/>
-</p>
 
 # Overview
 
