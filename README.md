@@ -1,6 +1,7 @@
 <div align="center">
   
 # 📁stree
+
 <img src="img/stree.png" alt="S3 directory tree visualization" height="350" width="350"/>
 </p>
 
