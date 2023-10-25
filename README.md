@@ -1,7 +1,6 @@
 <div align="center">
 
 <img src="img/stree.png" alt="S3 directory tree visualization" height="350" width="350"/>
-</p>
 
 # 📁stree
 Directory trees of S3
