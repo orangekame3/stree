@@ -34,10 +34,10 @@ func InitializeAWSSession(config S3Config) *s3.S3 {
 		}
 		// override region and endpoint
 		if config.AwsRegion != "" {
-			sess.Config.Region = aws.String(config.AwsRegion)
+			sessOptions.Config.Region = aws.String(config.AwsRegion)
 		}
 		if config.EndpointURL != "" {
-			sess.Config.Region = aws.String(config.AwsRegion)
+			sessOptions.Config.Endpoint = aws.String(config.EndpointURL)
 		}
 		sess = session.Must(session.NewSessionWithOptions(sessOptions))
 		return s3.New(sess)
