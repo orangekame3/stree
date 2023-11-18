@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.0.12](https://github.com/orangekame3/stree/compare/v0.0.11...v0.0.12) - 2023-11-18
+- Update README.md by @orangekame3 in https://github.com/orangekame3/stree/pull/28
+- Modify warning by @ddddddO in https://github.com/orangekame3/stree/pull/31
+- Fix region and endpoint overrides by @lusingander in https://github.com/orangekame3/stree/pull/30
+
 ## [v0.0.11](https://github.com/orangekame3/stree/compare/v0.0.10...v0.0.11) - 2023-10-01
 
 - add CODEOWNERS by @orangekame3 in <https://github.com/orangekame3/stree/pull/21>
