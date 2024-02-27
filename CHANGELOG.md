@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.0.13](https://github.com/orangekame3/stree/compare/v0.0.12...v0.0.13) - 2024-02-27
+
 ## [v0.0.12](https://github.com/orangekame3/stree/compare/v0.0.11...v0.0.12) - 2023-11-18
 - Update README.md by @orangekame3 in https://github.com/orangekame3/stree/pull/28
 - Modify warning by @ddddddO in https://github.com/orangekame3/stree/pull/31
