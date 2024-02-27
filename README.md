@@ -30,6 +30,8 @@ Whether it's for verifying the file structure, sharing the structure with your t
 
 日本語の紹介記事→[stree：S3バケットをtreeするCLIコマンド](https://future-architect.github.io/articles/20230926a/)
 
+[Community \| AWS open source newsletter, \#189](https://community.aws/content/2cXuki31b6cvPtkoOMdNNxfLKfr/aws-open-source-newsletter-189)
+
 # Features
 
 - **Colorized Output**: By default, `stree` provides a colorized tree structure, making it easy to differentiate between directories and files at a glance. This feature can be turned off with the `-n` or `--no-color` flag.
