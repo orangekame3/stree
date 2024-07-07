@@ -46,6 +46,7 @@ var (
 	noColor     bool
 	mfa         bool
 	level       int
+	fullPath    bool
 )
 
 var rootCmd = &cobra.Command{
@@ -80,10 +81,10 @@ var rootCmd = &cobra.Command{
 
 		root := gtree.NewRoot(bucket)
 		if noColor {
-			root = pkg.BuildTreeWithoutColor(root, keys)
+			root = pkg.BuildTreeWithoutColor(root, bucket, keys, fullPath)
 		} else {
 			root = gtree.NewRoot(color.BlueString(bucket))
-			root = pkg.BuildTreeWithColor(root, keys)
+			root = pkg.BuildTreeWithColor(root, bucket, keys, fullPath)
 		}
 
 		if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
@@ -111,6 +112,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
 	rootCmd.Flags().BoolVarP(&mfa, "mfa", "m", false, "Use Multi-Factor Authentication")
 	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
+	rootCmd.Flags().BoolVarP(&fullPath, "", "f", false, "Print the full path prefix for each file.")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
@@ -126,11 +128,6 @@ func extractBucketAndPrefix(input string) (string, string, error) {
 	}
 
 	return bucket, parts[1], nil
-}
-
-// SetVersionInfo sets version and date to rootCmd
-func SetVersionInfo(version, date string) {
-	rootCmd.Version = fmt.Sprintf("%s (Built on %s)", version, date)
 }
 
 func defaultProfile() string {

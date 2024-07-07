@@ -2,12 +2,26 @@
 package pkg
 
 import (
+	"fmt"
+
 	"github.com/ddddddO/gtree"
 	"github.com/fatih/color"
 )
 
+// createFullPath creates a full path for each keys
+func createFullPath(bucket string, keys [][]string)[][]string {
+	for i := range keys {
+		keys[i][len(keys[i])-1] = fmt.Sprintf("%s/%s", bucket, keys[i][len(keys[i])-1])
+	}
+	return keys
+}
+
 // BuildTreeWithColor builds a tree with colored nodes
-func BuildTreeWithColor(root *gtree.Node, keys [][]string) *gtree.Node {
+func BuildTreeWithColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
+	if f {
+		keys = createFullPath(bucket, keys)
+	}
+
 	for _, key := range keys {
 		addNodeWithColor(root, key, 0)
 	}
@@ -15,7 +29,10 @@ func BuildTreeWithColor(root *gtree.Node, keys [][]string) *gtree.Node {
 }
 
 // BuildTreeWithoutColor builds a tree without colored nodes
-func BuildTreeWithoutColor(root *gtree.Node, keys [][]string) *gtree.Node {
+func BuildTreeWithoutColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
+	if f {
+		keys = createFullPath(bucket, keys)
+	}
 	for _, key := range keys {
 		addNodeWithoutColor(root, key, 0)
 	}

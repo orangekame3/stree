@@ -1,5 +1,6 @@
+// Package cmd is a root command.
 /*
-Copyright © 2023 Takafumi Miyanaga <miya.org.0309@gmail.com>
+Copyright © 2024 Takafumi Miyanaga <orangekame3.dev@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import (
-	"time"
+import "fmt"
 
-	"github.com/orangekame3/stree/cmd"
-)
+// Version is a version of this application.
+const Version = "0.0.12"
 
-func main() {
-	cmd.SetVersionInfo(cmd.Version, time.Now().String())
-	cmd.Execute()
+// SetVersionInfo sets version and date to rootCmd
+func SetVersionInfo(version, date string) {
+	rootCmd.Version = fmt.Sprintf("%s (Built on %s)", version, date)
 }

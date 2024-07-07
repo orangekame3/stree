@@ -41,6 +41,7 @@ Whether it's for verifying the file structure, sharing the structure with your t
 - **Depth level Specification**: With the new `--L` flag, you can now specify how many levels deep in the directory structure you'd like to visualize. This offers a more focused view, especially for large S3 buckets.
 - **Role Switching Support**: `stree` is now enhanced with the ability to switch AWS roles with MFA using the `--mfa` flag. This makes it easier to manage and view S3 buckets that require different IAM roles for access.
 - **Environment Variable Support**: `stree` now prioritizes environment variables for AWS Profile and Region settings. The tool will use the `AWS_PROFILE` environment variable if set, falling back to the `default` profile otherwise. Similarly, it will use the `AWS_REGION` or `AWS_DEFAULT_REGION` environment variables for the AWS region, if available. (see [AWS CLI Environment Variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html) for more information)
+- **Full Path Display**: With the `-f` flag, the full path of each file is now displayed in the output, making it easier to identify the location of each item within the S3 bucket.
 
 # Install
 
@@ -256,6 +257,7 @@ Flags:
   -n, --no-color              Disable colorized output
   -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
+  -f                          Print the full path prefix for each file.
 ```
 
 # License
