@@ -1,7 +1,8 @@
 # Changelog
 
 ## [v0.0.15](https://github.com/orangekame3/stree/compare/v0.0.14...v0.0.15) - 2024-07-08
-- [bug]: Fix `-f` option by @orangekame3 in https://github.com/orangekame3/stree/pull/37
+
+- [bug]: Fix `-f` option by @orangekame3 in <https://github.com/orangekame3/stree/pull/37>
 
 ## [v0.0.14](https://github.com/orangekame3/stree/compare/v0.0.13...v0.0.14) - 2024-07-07
 
