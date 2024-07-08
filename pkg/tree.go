@@ -3,19 +3,19 @@ package pkg
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/ddddddO/gtree"
 	"github.com/fatih/color"
 )
 
 // createFullPath creates a full path for each keys
-func createFullPath(bucket string, keys [][]string)[][]string {
+func createFullPath(bucket string, keys [][]string) [][]string {
 	for i := range keys {
-		keys[i][len(keys[i])-1] = fmt.Sprintf("%s/%s", bucket, keys[i][len(keys[i])-1])
+		keys[i][len(keys[i])-1] = fmt.Sprintf("%s/%s", bucket, strings.Join(keys[i], "/"))
 	}
 	return keys
 }
-
 // BuildTreeWithColor builds a tree with colored nodes
 func BuildTreeWithColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
 	if f {
