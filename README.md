@@ -261,12 +261,12 @@ Flags:
   -m, --mfa                   Use Multi-Factor Authentication
   -n, --no-color              Disable colorized output
   -o, --output string         Send output to filename.
+  -P, --pattern string        List files that match the pattern.
   -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
   -s, --size                  Print the size of each file in bytes along with the name.
   -u, --username              Print the owner of each file.
   -v, --version               version for stree
-
 
 ```
 

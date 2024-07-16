@@ -53,6 +53,7 @@ var (
 	dateTime      bool
 	username      bool
 	directoryOnly bool
+	pattern 	 string
 )
 
 var rootCmd = &cobra.Command{
@@ -83,7 +84,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth, size, humanReadable, dateTime, username)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth, size, humanReadable, dateTime, username,pattern)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -145,6 +146,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&dateTime, "date-time", "D", false, "Print the last modified time of each file.")
 	rootCmd.Flags().BoolVarP(&username, "username", "u", false, "Print the owner of each file.")
 	rootCmd.Flags().BoolVarP(&directoryOnly, "directory-only", "d", false, "List directories only.")
+	rootCmd.Flags().StringVarP(&pattern, "pattern", "P", "", "List files that match the pattern.")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
