@@ -3,7 +3,6 @@ package pkg
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -87,8 +86,6 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 		currentDepth := depth[0]
 		queue = queue[1:]
 		depth = depth[1:]
-		fmt.Println("queue", queue)
-		fmt.Println("currentPrefix", currentPrefix)
 
 		if maxDepth != nil && currentDepth >= *maxDepth {
 			key := strings.Split(currentPrefix, "/")
@@ -103,23 +100,20 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 		}
 
 		paginator := s3.NewListObjectsV2Paginator(s3Client, input)
-		// fmt.Println("paginator", paginator)
+
 		for paginator.HasMorePages() {
 			page, err := paginator.NextPage(context.TODO())
 			if err != nil {
 				return nil, err
 			}
-			
-				// fmt.Println("commonPrefixes", page.CommonPrefixes)
-			
-				for _, obj := range page.Contents {
-					key := strings.Split(*obj.Key, "/")
-					keys = append(keys, key)
-				}
-			
+
+			for _, obj := range page.Contents {
+				key := strings.Split(*obj.Key, "/")
+				keys = append(keys, key)
+			}
 
 			if maxDepth != nil {
-				
+
 				for _, commonPrefix := range page.CommonPrefixes {
 					if _, ok := queued[*commonPrefix.Prefix]; ok {
 						continue
@@ -129,7 +123,6 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 					queued[*commonPrefix.Prefix] = struct{}{}
 				}
 			}
-		fmt.Println("commonPrefixes", page.CommonPrefixes)
 		}
 	}
 	return keys, nil

@@ -47,8 +47,7 @@ var (
 	mfa         bool
 	level       int
 	fullPath    bool
-	fileName string
-
+	fileName    string
 )
 
 var rootCmd = &cobra.Command{
@@ -65,7 +64,7 @@ var rootCmd = &cobra.Command{
 			MFA:         mfa,
 		}
 
-		s3Svc,err := pkg.InitializeAWSSession(s3Config)
+		s3Svc, err := pkg.InitializeAWSSession(s3Config)
 		if err != nil {
 			log.Fatalf("failed to initialize AWS session: %v", err)
 			return
@@ -93,9 +92,8 @@ var rootCmd = &cobra.Command{
 			root = pkg.BuildTreeWithColor(root, bucket, keys, fullPath)
 		}
 
-
 		fileCount, dirCount := pkg.ProcessKeys(keys)
-		
+
 		if fileName != "" {
 			f, err := os.Create(fileName)
 			if err != nil {
@@ -108,8 +106,8 @@ var rootCmd = &cobra.Command{
 				return
 			}
 			fmt.Fprintf(f, "\n%d directories, %d files\n", dirCount, fileCount)
-			
-		}else{
+
+		} else {
 			if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
 				log.Fatalf("failed to output tree: %v", err)
 				return
