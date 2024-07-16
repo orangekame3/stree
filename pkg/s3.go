@@ -88,7 +88,7 @@ func formatBytes(b int64) string {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, size, humanReadable bool, dateTime bool, username bool,pattern string) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, size, humanReadable bool, dateTime bool, username bool,pattern string,inversePattern string) ([][]string, error) {
 	var delimiter *string
 	var fetchOwner *bool
 	if maxDepth != nil {
@@ -154,11 +154,17 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 				if len(meta) > 0 {
 					key[len(key)-1] = fmt.Sprintf("[%7s] %s", strings.Join(meta, " "), key[len(key)-1])
 				}
+				include := true
 				if pattern != "" {
-					if match, _ := filepath.Match(pattern, filepath.Base(*obj.Key)); match {
-						keys = append(keys, key)
+					include, _ = filepath.Match(pattern, filepath.Base(*obj.Key))
+				}
+				if inversePattern != "" {
+					exclude, _ := filepath.Match(inversePattern, filepath.Base(*obj.Key))
+					if exclude {
+						include = false
 					}
-				}else{
+				}
+				if include {
 					keys = append(keys, key)
 				}
 				
