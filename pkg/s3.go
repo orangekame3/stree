@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -86,7 +87,7 @@ func formatBytes(b int64) string {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int,size, humanReadable bool) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int,size, humanReadable bool,dateTime bool) ([][]string, error) {
 	var delimiter *string
 	if maxDepth != nil {
 		delimiter = aws.String("/")
@@ -124,10 +125,22 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 
 			for _, obj := range page.Contents {
 				key := strings.Split(*obj.Key, "/")
+			
+				meta := []string{}
 				if humanReadable {
-					key[len(key)-1] = fmt.Sprintf("[%7s] %s", formatBytes(*obj.Size), key[len(key)-1])
+					meta = append(meta, formatBytes(*obj.Size))
 				} else if size {
-					key[len(key)-1] = fmt.Sprintf("[%7d] %s", *obj.Size, key[len(key)-1])
+					meta = append(meta, fmt.Sprintf("%d", *obj.Size))
+				}
+				if dateTime {
+					t := *obj.LastModified
+					layout := "Jan 2 15:04"
+					formatted := t.In(time.Local).Format(layout)
+					fmt.Println(formatted)
+					meta = append(meta, formatted)
+				}
+				if len(meta) > 0 {
+					key[len(key)-1] = fmt.Sprintf("[%7s] %s", strings.Join(meta, " "), key[len(key)-1])
 				}
 				keys = append(keys, key)
 			}

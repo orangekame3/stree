@@ -50,6 +50,7 @@ var (
 	fileName    string
 	size 	  bool
 	humanReadable bool
+	dateTime   bool
 )
 
 var rootCmd = &cobra.Command{
@@ -80,7 +81,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth,size, humanReadable)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth,size, humanReadable,dateTime)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -139,6 +140,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&fileName, "output", "o", "", "Send output to filename.")
 	rootCmd.Flags().BoolVarP(&size, "size", "s", false, "Print the size of each file in bytes along with the name.")
 	rootCmd.Flags().BoolVarP(&humanReadable, "human-readable", "H", false, "Print the size of each file but in a more human readable way, e.g. appending a size letter for kilobytes (K), megabytes (M), gigabytes (G), terabytes (T), petabytes (P) and exabytes(E).")
+	rootCmd.Flags().BoolVarP(&dateTime, "date-time", "D", false, "Print the last modified time of each file.")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
