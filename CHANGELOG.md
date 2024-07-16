@@ -1,10 +1,11 @@
 # Changelog
 
 ## [v0.0.19](https://github.com/orangekame3/stree/compare/v0.0.18...v0.0.19) - 2024-07-16
-- [feat]: Add user by @orangekame3 in https://github.com/orangekame3/stree/pull/45
-- [feat]: Add -d option by @orangekame3 in https://github.com/orangekame3/stree/pull/47
-- [feat]: Add `-P` option by @orangekame3 in https://github.com/orangekame3/stree/pull/48
-- [feat]: add -I option by @orangekame3 in https://github.com/orangekame3/stree/pull/49
+
+- [feat]: Add user by @orangekame3 in <https://github.com/orangekame3/stree/pull/45>
+- [feat]: Add -d option by @orangekame3 in <https://github.com/orangekame3/stree/pull/47>
+- [feat]: Add `-P` option by @orangekame3 in <https://github.com/orangekame3/stree/pull/48>
+- [feat]: add -I option by @orangekame3 in <https://github.com/orangekame3/stree/pull/49>
 
 ## [v0.0.18](https://github.com/orangekame3/stree/compare/v0.0.17...v0.0.18) - 2024-07-16
 
