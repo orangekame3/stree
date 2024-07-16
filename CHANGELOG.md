@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.18](https://github.com/orangekame3/stree/compare/v0.0.17...v0.0.18) - 2024-07-16
+- [feat]: Add datetime by @orangekame3 in https://github.com/orangekame3/stree/pull/43
+
 ## [v0.0.17](https://github.com/orangekame3/stree/compare/v0.0.16...v0.0.17) - 2024-07-16
 
 - [feat]: Add size option by @orangekame3 in <https://github.com/orangekame3/stree/pull/41>
