@@ -39,22 +39,23 @@ import (
 )
 
 var (
-	awsProfile    string
-	awsRegion     string
-	endpointURL   string
-	local         bool
-	noColor       bool
-	mfa           bool
-	level         int
-	fullPath      bool
-	fileName      string
-	size          bool
-	humanReadable bool
-	dateTime      bool
-	username      bool
-	directoryOnly bool
-	pattern 	 string
+	awsProfile     string
+	awsRegion      string
+	endpointURL    string
+	local          bool
+	noColor        bool
+	mfa            bool
+	level          int
+	fullPath       bool
+	fileName       string
+	size           bool
+	humanReadable  bool
+	dateTime       bool
+	username       bool
+	directoryOnly  bool
+	pattern        string
 	inversePattern string
+	noReport       bool
 )
 
 var rootCmd = &cobra.Command{
@@ -85,7 +86,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth, size, humanReadable, dateTime, username,pattern,inversePattern)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth, size, humanReadable, dateTime, username, pattern, inversePattern)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -112,14 +113,17 @@ var rootCmd = &cobra.Command{
 				log.Fatalf("failed to output tree: %v", err)
 				return
 			}
-			fmt.Fprintf(f, "\n%d directories, %d files\n", dirCount, fileCount)
-
+			if !noReport {
+				fmt.Fprintf(f, "\n%d directories, %d files\n", dirCount, fileCount)
+			}
 		} else {
 			if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
 				log.Fatalf("failed to output tree: %v", err)
 				return
 			}
-			fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
+			if !noReport {
+				fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
+			}
 		}
 	},
 }
@@ -149,6 +153,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&directoryOnly, "directory-only", "d", false, "List directories only.")
 	rootCmd.Flags().StringVarP(&pattern, "pattern", "P", "", "List files that match the pattern.")
 	rootCmd.Flags().StringVarP(&inversePattern, "inverse-pattern", "I", "", "List files that do not match the pattern.")
+	rootCmd.Flags().BoolVarP(&noReport, "noreport", "", false, "Omits printing of the file and directory report at the end of the tree listing.")
 
 }
 
