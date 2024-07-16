@@ -3,6 +3,7 @@ package pkg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -71,9 +72,9 @@ func InitializeAWSSession(conf S3Config) (*s3.Client, error) {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, directoryOnly bool) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int) ([][]string, error) {
 	var delimiter *string
-	if maxDepth != nil || directoryOnly {
+	if maxDepth != nil {
 		delimiter = aws.String("/")
 	}
 	queue := []string{prefix}
@@ -86,6 +87,8 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 		currentDepth := depth[0]
 		queue = queue[1:]
 		depth = depth[1:]
+		fmt.Println("queue", queue)
+		fmt.Println("currentPrefix", currentPrefix)
 
 		if maxDepth != nil && currentDepth >= *maxDepth {
 			key := strings.Split(currentPrefix, "/")
@@ -100,30 +103,23 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 		}
 
 		paginator := s3.NewListObjectsV2Paginator(s3Client, input)
-
+		// fmt.Println("paginator", paginator)
 		for paginator.HasMorePages() {
 			page, err := paginator.NextPage(context.TODO())
 			if err != nil {
 				return nil, err
 			}
-			if directoryOnly {
-				for _, commonPrefix := range page.CommonPrefixes {
-					key := strings.Split(*commonPrefix.Prefix, "/")
-					keys = append(keys, key)
-					if maxDepth == nil || currentDepth+1 < *maxDepth {
-						queue = append(queue, *commonPrefix.Prefix)
-						depth = append(depth, currentDepth+1)
-						queued[*commonPrefix.Prefix] = struct{}{}
-					}
-				}
-			} else {
+			
+				// fmt.Println("commonPrefixes", page.CommonPrefixes)
+			
 				for _, obj := range page.Contents {
 					key := strings.Split(*obj.Key, "/")
 					keys = append(keys, key)
 				}
-			}
+			
 
 			if maxDepth != nil {
+				
 				for _, commonPrefix := range page.CommonPrefixes {
 					if _, ok := queued[*commonPrefix.Prefix]; ok {
 						continue
@@ -133,6 +129,7 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 					queued[*commonPrefix.Prefix] = struct{}{}
 				}
 			}
+		fmt.Println("commonPrefixes", page.CommonPrefixes)
 		}
 	}
 	return keys, nil
