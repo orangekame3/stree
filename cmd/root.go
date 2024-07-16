@@ -47,6 +47,7 @@ var (
 	mfa         bool
 	level       int
 	fullPath    bool
+	fileName    string
 )
 
 var rootCmd = &cobra.Command{
@@ -63,7 +64,11 @@ var rootCmd = &cobra.Command{
 			MFA:         mfa,
 		}
 
-		s3Svc := pkg.InitializeAWSSession(s3Config)
+		s3Svc, err := pkg.InitializeAWSSession(s3Config)
+		if err != nil {
+			log.Fatalf("failed to initialize AWS session: %v", err)
+			return
+		}
 
 		bucket, prefix, err := extractBucketAndPrefix(args[0])
 		if err != nil {
@@ -80,19 +85,35 @@ var rootCmd = &cobra.Command{
 		}
 
 		root := gtree.NewRoot(bucket)
-		if noColor {
+		if noColor || fileName != "" {
 			root = pkg.BuildTreeWithoutColor(root, bucket, keys, fullPath)
 		} else {
 			root = gtree.NewRoot(color.BlueString(bucket))
 			root = pkg.BuildTreeWithColor(root, bucket, keys, fullPath)
 		}
 
-		if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
-			log.Fatalf("failed to output tree: %v", err)
-			return
-		}
 		fileCount, dirCount := pkg.ProcessKeys(keys)
-		fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
+
+		if fileName != "" {
+			f, err := os.Create(fileName)
+			if err != nil {
+				log.Fatalf("failed to create file: %v", err)
+				return
+			}
+			defer f.Close()
+			if err := gtree.OutputProgrammably(f, root); err != nil {
+				log.Fatalf("failed to output tree: %v", err)
+				return
+			}
+			fmt.Fprintf(f, "\n%d directories, %d files\n", dirCount, fileCount)
+
+		} else {
+			if err := gtree.OutputProgrammably(os.Stdout, root); err != nil {
+				log.Fatalf("failed to output tree: %v", err)
+				return
+			}
+			fmt.Printf("\n%d directories, %d files\n", dirCount, fileCount)
+		}
 	},
 }
 
@@ -112,7 +133,8 @@ func init() {
 	rootCmd.Flags().BoolVarP(&noColor, "no-color", "n", false, "Disable colorized output")
 	rootCmd.Flags().BoolVarP(&mfa, "mfa", "m", false, "Use Multi-Factor Authentication")
 	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
-	rootCmd.Flags().BoolVarP(&fullPath, "", "f", false, "Print the full path prefix for each file.")
+	rootCmd.Flags().BoolVarP(&fullPath, "full-path", "f", false, "Print the full path prefix for each file.")
+	rootCmd.Flags().StringVarP(&fileName, "output", "o", "", "Send output to filename.")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {

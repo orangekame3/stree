@@ -16,6 +16,7 @@ func createFullPath(bucket string, keys [][]string) [][]string {
 	}
 	return keys
 }
+
 // BuildTreeWithColor builds a tree with colored nodes
 func BuildTreeWithColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
 	if f {

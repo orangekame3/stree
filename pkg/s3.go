@@ -2,13 +2,14 @@
 package pkg
 
 import (
+	"context"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 // S3Config represents the configuration for an S3 session
@@ -21,45 +22,56 @@ type S3Config struct {
 }
 
 // InitializeAWSSession returns an AWS session based on the provided configuration
-func InitializeAWSSession(config S3Config) *s3.S3 {
-	var sess *session.Session
-	if config.Local {
-		sessOptions := session.Options{
-			Config: aws.Config{
-				Region:           aws.String("us-east-1"),
-				Endpoint:         aws.String("http://localhost:4566"),
-				S3ForcePathStyle: aws.Bool(true),
-				Credentials:      credentials.NewStaticCredentials("dummy", "dummy", ""),
-			},
+func InitializeAWSSession(conf S3Config) (*s3.Client, error) {
+	var awsConfig aws.Config
+	var err error
+
+	if conf.Local {
+		awsConfig, err = config.LoadDefaultConfig(context.TODO(),
+			config.WithRegion("us-east-1"),
+			config.WithEndpointResolver(aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
+				return aws.Endpoint{
+					URL:           "http://localhost:4566",
+					SigningRegion: "us-east-1",
+				}, nil
+			})),
+			config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("dummy", "dummy", "")),
+		)
+		if conf.AwsRegion != "" {
+			awsConfig.Region = conf.AwsRegion
 		}
-		// override region and endpoint
-		if config.AwsRegion != "" {
-			sessOptions.Config.Region = aws.String(config.AwsRegion)
+		if conf.EndpointURL != "" {
+			awsConfig.EndpointResolver = aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
+				return aws.Endpoint{
+					URL:           conf.EndpointURL,
+					SigningRegion: conf.AwsRegion,
+				}, nil
+			})
 		}
-		if config.EndpointURL != "" {
-			sessOptions.Config.Endpoint = aws.String(config.EndpointURL)
+	} else {
+		loadOptions := []func(*config.LoadOptions) error{
+			config.WithSharedConfigProfile(conf.AwsProfile),
 		}
-		sess = session.Must(session.NewSessionWithOptions(sessOptions))
-		return s3.New(sess)
+		if conf.AwsRegion != "" {
+			loadOptions = append(loadOptions, config.WithRegion(conf.AwsRegion))
+		}
+		if conf.MFA {
+			loadOptions = append(loadOptions, config.WithAssumeRoleCredentialOptions(func(options *stscreds.AssumeRoleOptions) {
+				options.TokenProvider = stscreds.StdinTokenProvider
+			}))
+		}
+		awsConfig, err = config.LoadDefaultConfig(context.TODO(), loadOptions...)
 	}
 
-	sessOptions := session.Options{
-		Profile:           config.AwsProfile,
-		SharedConfigState: session.SharedConfigEnable,
+	if err != nil {
+		return nil, err
 	}
-	// override region
-	if config.AwsRegion != "" {
-		sessOptions.Config.Region = aws.String(config.AwsRegion)
-	}
-	if config.MFA {
-		sessOptions.AssumeRoleTokenProvider = stscreds.StdinTokenProvider
-	}
-	sess = session.Must(session.NewSessionWithOptions(sessOptions))
-	return s3.New(sess)
+
+	return s3.NewFromConfig(awsConfig), nil
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string, maxDepth *int) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int) ([][]string, error) {
 	var delimiter *string
 	if maxDepth != nil {
 		delimiter = aws.String("/")
@@ -87,25 +99,30 @@ func FetchS3ObjectKeys(s3Svc *s3.S3, bucket string, prefix string, maxDepth *int
 			Delimiter: delimiter,
 		}
 
-		pageHandler := func(page *s3.ListObjectsV2Output, lastPage bool) bool {
+		paginator := s3.NewListObjectsV2Paginator(s3Client, input)
+
+		for paginator.HasMorePages() {
+			page, err := paginator.NextPage(context.TODO())
+			if err != nil {
+				return nil, err
+			}
+
 			for _, obj := range page.Contents {
 				key := strings.Split(*obj.Key, "/")
 				keys = append(keys, key)
 			}
+
 			if maxDepth != nil {
+
 				for _, commonPrefix := range page.CommonPrefixes {
 					if _, ok := queued[*commonPrefix.Prefix]; ok {
 						continue
 					}
 					queue = append(queue, *commonPrefix.Prefix)
 					depth = append(depth, currentDepth+1)
+					queued[*commonPrefix.Prefix] = struct{}{}
 				}
 			}
-			return !lastPage
-		}
-
-		if err := s3Svc.ListObjectsV2Pages(input, pageHandler); err != nil {
-			return nil, err
 		}
 	}
 	return keys, nil
