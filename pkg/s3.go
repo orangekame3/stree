@@ -88,7 +88,7 @@ func formatBytes(b int64) string {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, size, humanReadable bool, dateTime bool, username bool,pattern string,inversePattern string) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, size, humanReadable bool, dateTime bool, username bool, pattern string, inversePattern string) ([][]string, error) {
 	var delimiter *string
 	var fetchOwner *bool
 	if maxDepth != nil {
@@ -167,7 +167,7 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 				if include {
 					keys = append(keys, key)
 				}
-				
+
 			}
 
 			if maxDepth != nil {
