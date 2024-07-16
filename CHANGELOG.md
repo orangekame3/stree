@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.17](https://github.com/orangekame3/stree/compare/v0.0.16...v0.0.17) - 2024-07-16
+- [feat]: Add size option by @orangekame3 in https://github.com/orangekame3/stree/pull/41
+
 ## [v0.0.16](https://github.com/orangekame3/stree/compare/v0.0.15...v0.0.16) - 2024-07-16
 
 - Add output option by @orangekame3 in <https://github.com/orangekame3/stree/pull/39>
