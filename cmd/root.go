@@ -48,6 +48,8 @@ var (
 	level       int
 	fullPath    bool
 	fileName    string
+	size 	  bool
+	humanReadable bool
 )
 
 var rootCmd = &cobra.Command{
@@ -78,7 +80,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth,size, humanReadable)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -135,6 +137,8 @@ func init() {
 	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
 	rootCmd.Flags().BoolVarP(&fullPath, "full-path", "f", false, "Print the full path prefix for each file.")
 	rootCmd.Flags().StringVarP(&fileName, "output", "o", "", "Send output to filename.")
+	rootCmd.Flags().BoolVarP(&size, "size", "s", false, "Print the size of each file in bytes along with the name.")
+	rootCmd.Flags().BoolVarP(&humanReadable, "human-readable", "H", false, "Print the size of each file but in a more human readable way, e.g. appending a size letter for kilobytes (K), megabytes (M), gigabytes (G), terabytes (T), petabytes (P) and exabytes(E).")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
