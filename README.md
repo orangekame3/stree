@@ -251,6 +251,7 @@ Usage:
 
 Flags:
   -D, --date-time             Print the last modified time of each file.
+  -d, --directory-only        List directories only.
   -e, --endpoint-url string   AWS endpoint URL to use (useful for local testing with LocalStack)
   -f, --full-path             Print the full path prefix for each file.
   -h, --help                  help for stree
@@ -263,7 +264,9 @@ Flags:
   -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
   -s, --size                  Print the size of each file in bytes along with the name.
-  -u, --username              Print the owner of
+  -u, --username              Print the owner of each file.
+  -v, --version               version for stree
+
 
 ```
 
