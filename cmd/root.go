@@ -47,6 +47,8 @@ var (
 	mfa         bool
 	level       int
 	fullPath    bool
+	directoryOnly   bool
+
 )
 
 var rootCmd = &cobra.Command{
@@ -63,7 +65,11 @@ var rootCmd = &cobra.Command{
 			MFA:         mfa,
 		}
 
-		s3Svc := pkg.InitializeAWSSession(s3Config)
+		s3Svc,err := pkg.InitializeAWSSession(s3Config)
+		if err != nil {
+			log.Fatalf("failed to initialize AWS session: %v", err)
+			return
+		}
 
 		bucket, prefix, err := extractBucketAndPrefix(args[0])
 		if err != nil {
@@ -73,7 +79,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth,directoryOnly)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -113,6 +119,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&mfa, "mfa", "m", false, "Use Multi-Factor Authentication")
 	rootCmd.Flags().IntVarP(&level, "level", "L", 0, "Descend only level directories")
 	rootCmd.Flags().BoolVarP(&fullPath, "", "f", false, "Print the full path prefix for each file.")
+	rootCmd.Flags().BoolVarP(&directoryOnly, "directory", "d", false, "List directories only")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
