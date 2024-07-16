@@ -263,7 +263,7 @@ Flags:
   -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
   -s, --size                  Print the size of each file in bytes along with the name.
-
+  -u, --username              Print the owner of
 
 ```
 
