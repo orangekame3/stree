@@ -87,7 +87,7 @@ func formatBytes(b int64) string {
 }
 
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int,size, humanReadable bool,dateTime bool,username bool) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int, size, humanReadable bool, dateTime bool, username bool) ([][]string, error) {
 	var delimiter *string
 	var fetchOwner *bool
 	if maxDepth != nil {
@@ -115,9 +115,9 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 		}
 
 		input := &s3.ListObjectsV2Input{
-			Bucket:    aws.String(bucket),
-			Prefix:    aws.String(currentPrefix),
-			Delimiter: delimiter,
+			Bucket:     aws.String(bucket),
+			Prefix:     aws.String(currentPrefix),
+			Delimiter:  delimiter,
 			FetchOwner: fetchOwner,
 		}
 
@@ -131,8 +131,7 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 
 			for _, obj := range page.Contents {
 				key := strings.Split(*obj.Key, "/")
-				// fmt.Println(*obj.Owner.DisplayName)
-			
+
 				meta := []string{}
 
 				if username {

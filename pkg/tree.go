@@ -18,51 +18,61 @@ func createFullPath(bucket string, keys [][]string) [][]string {
 }
 
 // BuildTreeWithColor builds a tree with colored nodes
-func BuildTreeWithColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
+func BuildTreeWithColor(root *gtree.Node, bucket string, keys [][]string, f bool, directoryOnly bool) *gtree.Node {
 	if f {
 		keys = createFullPath(bucket, keys)
 	}
 
 	for _, key := range keys {
-		addNodeWithColor(root, key, 0)
+		addNodeWithColor(root, key, 0, directoryOnly)
 	}
 	return root
 }
 
 // BuildTreeWithoutColor builds a tree without colored nodes
-func BuildTreeWithoutColor(root *gtree.Node, bucket string, keys [][]string, f bool) *gtree.Node {
+func BuildTreeWithoutColor(root *gtree.Node, bucket string, keys [][]string, f bool, directoryOnly bool) *gtree.Node {
 	if f {
 		keys = createFullPath(bucket, keys)
 	}
 	for _, key := range keys {
-		addNodeWithoutColor(root, key, 0)
+		addNodeWithoutColor(root, key, 0, directoryOnly)
 	}
 	return root
 }
 
-func addNodeWithoutColor(parent *gtree.Node, keys []string, depth int) *gtree.Node {
+func addNodeWithoutColor(parent *gtree.Node, keys []string, depth int, directoryOnly bool) *gtree.Node {
 	if len(keys) == 0 {
 		return nil
 	}
 
 	// Skip adding empty strings as nodes
 	if len(keys) == 1 && keys[0] == "" {
+		return nil
+	}
+
+	// Skip adding the root node if the tree is being built for a single directory
+	if directoryOnly && len(keys) == 1 {
 		return nil
 	}
 
 	// Add the current key (without color) as a node to the parent
 	node := parent.Add(keys[0])
 	// Recursively add the remaining keys
-	return addNodeWithoutColor(node, keys[1:], depth+1)
+	return addNodeWithoutColor(node, keys[1:], depth+1, directoryOnly)
 }
 
-func addNodeWithColor(parent *gtree.Node, keys []string, depth int) *gtree.Node {
+func addNodeWithColor(parent *gtree.Node, keys []string, depth int, directoryOnly bool) *gtree.Node {
 	if len(keys) == 0 {
 		return nil
 	}
 
 	// Skip adding empty strings as nodes
 	if len(keys) == 1 && keys[0] == "" {
+		return nil
+	}
+
+	// Skip adding the root node if the tree is being built for a single directory
+	if directoryOnly && len(keys) == 1 {
 		return nil
 	}
 
@@ -70,7 +80,7 @@ func addNodeWithColor(parent *gtree.Node, keys []string, depth int) *gtree.Node 
 	coloredKey := getColorizedKey(keys[0], len(keys) == 1)
 	node := parent.Add(coloredKey)
 
-	return addNodeWithColor(node, keys[1:], depth+1)
+	return addNodeWithColor(node, keys[1:], depth+1, directoryOnly)
 }
 
 // getColorizedKey returns the colored representation of a key, with different colors for files and directories

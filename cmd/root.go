@@ -39,19 +39,20 @@ import (
 )
 
 var (
-	awsProfile  string
-	awsRegion   string
-	endpointURL string
-	local       bool
-	noColor     bool
-	mfa         bool
-	level       int
-	fullPath    bool
-	fileName    string
-	size 	  bool
+	awsProfile    string
+	awsRegion     string
+	endpointURL   string
+	local         bool
+	noColor       bool
+	mfa           bool
+	level         int
+	fullPath      bool
+	fileName      string
+	size          bool
 	humanReadable bool
-	dateTime   bool
-	username bool
+	dateTime      bool
+	username      bool
+	directoryOnly bool
 )
 
 var rootCmd = &cobra.Command{
@@ -82,7 +83,7 @@ var rootCmd = &cobra.Command{
 		if level > 0 {
 			maxDepth = &level
 		}
-		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth,size, humanReadable,dateTime,username)
+		keys, err := pkg.FetchS3ObjectKeys(s3Svc, bucket, prefix, maxDepth, size, humanReadable, dateTime, username)
 		if err != nil {
 			log.Fatalf("failed to fetch S3 object keys: %v", err)
 			return
@@ -90,10 +91,10 @@ var rootCmd = &cobra.Command{
 
 		root := gtree.NewRoot(bucket)
 		if noColor || fileName != "" {
-			root = pkg.BuildTreeWithoutColor(root, bucket, keys, fullPath)
+			root = pkg.BuildTreeWithoutColor(root, bucket, keys, fullPath, directoryOnly)
 		} else {
 			root = gtree.NewRoot(color.BlueString(bucket))
-			root = pkg.BuildTreeWithColor(root, bucket, keys, fullPath)
+			root = pkg.BuildTreeWithColor(root, bucket, keys, fullPath, directoryOnly)
 		}
 
 		fileCount, dirCount := pkg.ProcessKeys(keys)
@@ -143,6 +144,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&humanReadable, "human-readable", "H", false, "Print the size of each file but in a more human readable way, e.g. appending a size letter for kilobytes (K), megabytes (M), gigabytes (G), terabytes (T), petabytes (P) and exabytes(E).")
 	rootCmd.Flags().BoolVarP(&dateTime, "date-time", "D", false, "Print the last modified time of each file.")
 	rootCmd.Flags().BoolVarP(&username, "username", "u", false, "Print the owner of each file.")
+	rootCmd.Flags().BoolVarP(&directoryOnly, "directory-only", "d", false, "List directories only.")
 }
 
 func extractBucketAndPrefix(input string) (string, string, error) {
