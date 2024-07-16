@@ -251,14 +251,19 @@ Usage:
 
 Flags:
   -e, --endpoint-url string   AWS endpoint URL to use (useful for local testing with LocalStack)
+  -f, --full-path             Print the full path prefix for each file.
   -h, --help                  help for stree
+  -H, --human-readable        Print the size of each file but in a more human readable way, e.g. appending a size letter for kilobytes (K), megabytes (M), gigabytes (G), terabytes (T), petabytes (P) and exabytes(E).
   -L, --level int             Descend only level directories
   -l, --local                 Use LocalStack configuration
   -m, --mfa                   Use Multi-Factor Authentication
   -n, --no-color              Disable colorized output
+  -o, --output string         Send output to filename.
   -p, --profile string        AWS profile to use (default "default")
   -r, --region string         AWS region to use (overrides the region specified in the profile)
-  -f                          Print the full path prefix for each file.
+  -s, --size                  Print the size of each file in bytes along with the name.
+  -v, --version               version for stree
+
 ```
 
 # License

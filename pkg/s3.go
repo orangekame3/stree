@@ -3,6 +3,7 @@ package pkg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -70,8 +71,22 @@ func InitializeAWSSession(conf S3Config) (*s3.Client, error) {
 	return s3.NewFromConfig(awsConfig), nil
 }
 
+// ref: https://yourbasic.org/golang/formatting-byte-size-to-human-readable-format/
+func formatBytes(b int64) string {
+	const unit = 1000
+	if b < unit {
+		return fmt.Sprintf("%d", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f%c", float64(b)/float64(div), "KMGTPE"[exp])
+}
+
 // FetchS3ObjectKeys returns a slice of keys for all objects in the specified bucket and prefix
-func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int) ([][]string, error) {
+func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDepth *int,size, humanReadable bool) ([][]string, error) {
 	var delimiter *string
 	if maxDepth != nil {
 		delimiter = aws.String("/")
@@ -109,6 +124,11 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 
 			for _, obj := range page.Contents {
 				key := strings.Split(*obj.Key, "/")
+				if humanReadable {
+					key[len(key)-1] = fmt.Sprintf("[%7s] %s", formatBytes(*obj.Size), key[len(key)-1])
+				} else if size {
+					key[len(key)-1] = fmt.Sprintf("[%7d] %s", *obj.Size, key[len(key)-1])
+				}
 				keys = append(keys, key)
 			}
 
