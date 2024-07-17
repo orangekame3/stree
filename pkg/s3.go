@@ -148,7 +148,6 @@ func FetchS3ObjectKeys(s3Client *s3.Client, bucket string, prefix string, maxDep
 					t := *obj.LastModified
 					layout := "Jan 2 15:04"
 					formatted := t.In(time.Local).Format(layout)
-					fmt.Println(formatted)
 					meta = append(meta, formatted)
 				}
 				if len(meta) > 0 {
