@@ -1,3 +1,4 @@
 volume/
 *.zip
 megalinter-reports/
+dummy/
