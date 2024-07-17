@@ -1,7 +1,8 @@
 # Changelog
 
 ## [v0.0.21](https://github.com/orangekame3/stree/compare/v0.0.20...v0.0.21) - 2024-07-17
-- update by @orangekame3 in https://github.com/orangekame3/stree/pull/52
+
+- update by @orangekame3 in <https://github.com/orangekame3/stree/pull/52>
 
 ## [v0.0.20](https://github.com/orangekame3/stree/compare/v0.0.19...v0.0.20) - 2024-07-16
 
